@@ -1,0 +1,36 @@
+<ion-content>
+  <app-menu></app-menu>
+
+  <app-header></app-header>
+
+  <div class="main-container" id="main-content">
+    <div 
+       class="hero-container" 
+       *ngFor="let content of contents | slice:0:1" 
+       [ngStyle]="{'background-image': 'url(' + content.content_image_obj?.full_url + ')'}">
+    </div>
+    
+    <div class="pictures" *ngFor="let content of contents">
+      <div class="liturgije">
+        <ion-card>
+          <ng-container *ngIf="content.content_has_image">
+            <img [alt]="content.content_image_obj?.display_name" [src]="content.content_image_obj?.full_url_thumbnail2x" />
+          </ng-container>
+        </ion-card>
+        <p>Liturgije časova</p>
+      </div>
+  
+      <div class="svetkovine">
+        <ion-card>
+          <ng-container *ngIf="content.content_has_image">
+            <img [alt]="content.content_image_obj?.display_name" [src]="content.content_image_obj?.full_url_thumbnail2x" />
+          </ng-container>
+        </ion-card>
+        <p>Naše svetkovine</p>
+      </div>
+    </div>
+    
+  </div>
+
+  <app-footer></app-footer>
+</ion-content>

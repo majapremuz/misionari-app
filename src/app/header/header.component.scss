@@ -1,0 +1,18 @@
+ion-toolbar {
+    --background: #cd0140;
+    --color: #f6f6f6;
+     padding: 0.5rem;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    position: absolute;
+    top: 0;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }

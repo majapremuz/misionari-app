@@ -1,0 +1,29 @@
+.hero-container {
+    height: 30vh;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  h1 {
+    margin-left: 1rem;
+  }
+
+  .links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 1rem;
+  }
+
+  .text-link {
+    --background: #b5c0c9;
+    --color: black;
+    width: 100%;
+    --border-radius: none;
+    text-align: left;
+  }
+  
+
