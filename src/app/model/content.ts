@@ -21,6 +21,7 @@ export interface ContentApiInterface {
     content_show_date: string
     content_archive: string
     content_attachment_key: number
+    content_attachment_key_obj: Array<ImageApiInterface> | null
     content_description: any
     segments: any[]
     content_image_obj: ImageApiInterface
@@ -46,6 +47,7 @@ interface ContentInterface {
     content_show_date: boolean
     content_archive: boolean
     content_attachment_key: number
+    content_attachment_key_obj: Array<ImageObject> | null
     content_description: string | null
     segments: any[]
     content_image_obj: ImageObject | null
@@ -77,6 +79,7 @@ export class ContentObject implements ContentInterface{
     content_show_date: boolean
     content_archive: boolean
     content_attachment_key: number
+    content_attachment_key_obj: Array<ImageObject> | null
     content_description: string | null
     segments: any[]
     content_image_obj: ImageObject | null
@@ -112,6 +115,7 @@ export class ContentObject implements ContentInterface{
         this.content_company_id_obj = null;
         this.content_uid_obj = null;
         this.content_has_image = false;
+        this.content_attachment_key_obj = null;
 
 
         if(data.content_type != null){
@@ -128,6 +132,16 @@ export class ContentObject implements ContentInterface{
 
         if(data.content_image_obj != null){
             this.content_image_obj = new ImageObject(data.content_image_obj);
+        }
+
+        if(data.content_attachment_key_obj != null){
+            data.content_attachment_key_obj.map(item => {
+                this.content_attachment_key_obj = [];
+                this.content_attachment_key_obj.push(
+                    new ImageObject(item)
+                );
+            })
+            
         }
 
         if(data.content_company_id_obj != null){

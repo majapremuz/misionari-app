@@ -318,9 +318,9 @@ export class ControllerService {
 
       if(cache == true && cachedData != undefined){
         if(cachedData.status == true && cachedData.data?.valid != false){
-          resolve(cachedData.data);
+          resolve(cachedData);
         }else{
-          reject({error: {error: 'server_error', error_description: cachedData.message}, data: cachedData.data});
+          reject({error: {error: 'server_error', error_description: cachedData.message}, data: cachedData});
         }
       }else{
 
@@ -339,17 +339,17 @@ export class ControllerService {
 
             this.setStorage(cache_data.key, JSON.stringify(cache_data)).then(() => {
               if(res.status == true && res.data?.valid != false){
-                resolve(res.data);
+                resolve(res);
               }else{
-                reject({error: {error: 'server_error', error_description: res.message}, data: res.data});
+                reject({error: {error: 'server_error', error_description: res.message}, data: res});
               }
             });
           }
           else{
             if(res.status == true && res.data?.valid != false){
-              resolve(res.data);
+              resolve(res);
             }else{
-              reject({error: {error: 'server_error', error_description: res.message}, data: res.data});
+              reject({error: {error: 'server_error', error_description: res.message}, data: res});
             }
           }
         })

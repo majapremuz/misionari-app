@@ -1,26 +1,32 @@
+<app-header></app-header>
 <ion-content [fullscreen]="true">
-  <app-header></app-header>
 
-  <div class="container" id="main-content">
-    <h1>{{ category }}</h1>
+  <div class="container" id="main-content" *ngIf = 'dataLoad'>
+    <h1>{{ content.content_name }}</h1>
 
     <div
     class="hero-container" 
-    *ngFor="let content of contents | slice:0:1" 
     [ngStyle]="{'background-image': 'url(' + content.content_image_obj?.full_url + ')'}">
  </div>
 
- <div class="text-container">
-      <span><p>Odlomci iz pisama MDM - za CIP.pdf</p></span>
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit, optio? Facere suscipit reprehenderit aliquam illo maiores pariatur. Beatae, aperiam at hic odio nihil dolor sint quis dolorum, animi culpa nemo.
-      Quasi, nulla, placeat illo nemo rem exercitationem aspernatur possimus veritatis vero explicabo, cumque nostrum ex itaque earum quam porro. Ab, nobis. Sequi repudiandae voluptatem ad officiis, deserunt tempore id voluptates.
-      Ad quasi id in odit, vero aut delectus fugiat dolorem quos, fuga quia consequuntur eveniet. Mollitia libero consequuntur ex. Iusto ea maxime temporibus similique? Illo ad quibusdam architecto fugiat aliquid!
-      Veniam inventore maxime optio voluptate officiis beatae, fuga, error illum accusamus minima consequatur similique voluptatum cumque, a delectus sunt? Blanditiis nisi totam dicta ut tempora, voluptate labore exercitationem omnis quidem?</p>
+ <div class="text-container"  *ngIf = 'dataLoad'>
+      <ng-container *ngIf="content.content_attachment_key_obj != null">
+        <ng-container *ngFor="let attachment of content.content_attachment_key_obj">
+          <span><p>{{ attachment.multimedia_file_old }}</p></span>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="content.segments.length > 0">
+        <ng-container *ngFor="let segment of content.segments">
+          <h2 *ngIf="segment.segment_title != ''">{{ segment.segment_title }}</h2>
+          <p>{{ segment.segment_description }}</p>
+        </ng-container>
+
+      </ng-container>
  </div>
  
  
   </div>
 
-  <app-menu></app-menu>
-  <app-footer></app-footer>
 </ion-content>
+<app-footer></app-footer>
+<app-menu></app-menu>

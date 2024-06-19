@@ -15,10 +15,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
-import { environment } from '../environments/environment';
-
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -33,9 +29,7 @@ import { environment } from '../environments/environment';
         useFactory: (createTranslateLoader),
         deps: [HttpClient]
       }
-    }),
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireMessagingModule
+    })
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

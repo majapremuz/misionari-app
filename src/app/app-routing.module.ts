@@ -15,11 +15,13 @@ const routes: Routes = [
   },
   {
     path: 'categories',
-    loadChildren: () => import('./pages/home/categories/categories.module').then( m => m.CategoriesPageModule)
+    loadChildren: () => import('./pages/categories/categories.module').then( m => m.CategoriesPageModule),
+    canLoad: [ReadyPageGuard]
   },
   {
-    path: 'text',
-    loadChildren: () => import('./text/text.module').then( m => m.TextPageModule)
+    path: 'text/:id',
+    loadChildren: () => import('./text/text.module').then( m => m.TextPageModule),
+    canLoad: [ReadyPageGuard]
   },
 ];
 

@@ -1,0 +1,27 @@
+<app-header></app-header>
+<ion-content [fullscreen]="true">
+
+
+  <div class="container" id="main-content">
+    <h1>{{ formatedCategory() }}</h1>
+
+    <div
+    class="hero-container" 
+    *ngFor="let content of contents | slice:0:1" 
+    [ngStyle]="{'background-image': 'url(' + content.content_image_obj?.full_url + ')'}">
+ </div>
+
+ <div class="links" *ngFor="let content of contents | slice:0:3">
+    <ion-button class="text-link" (click)="goToTextPage(content.content_name)">
+        <p>
+          {{ content.content_name }}
+        </p>
+      </ion-button>
+ </div>
+ 
+ 
+  </div>
+
+  <app-menu></app-menu>
+</ion-content>
+<app-footer></app-footer>
