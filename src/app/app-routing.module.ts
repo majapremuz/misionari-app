@@ -14,7 +14,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'categories',
+    path: 'categories/:id',
     loadChildren: () => import('./pages/categories/categories.module').then( m => m.CategoriesPageModule),
     canLoad: [ReadyPageGuard]
   },

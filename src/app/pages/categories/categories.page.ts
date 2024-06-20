@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ContentApiInterface, ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
-import { CategoryService } from '../../services/category.service';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { MenuComponent } from '../menu/menu.component';
@@ -17,69 +17,38 @@ import { MenuComponent } from '../menu/menu.component';
   imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent, MenuComponent]
 })
 export class CategoriesPage implements OnInit{
-  selectedCategory: string = '';
-  
+  dataLoad: boolean = false;
   translate: any = [];
 
   contents: Array<ContentObject> = [];
+  category!: ContentObject;
 
   constructor(
-    private router: Router,
     private dataCtrl: ControllerService,
-    private categoryService: CategoryService
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit() {
-    this.categoryService.selectedCategory$.subscribe(category => {
-      this.selectedCategory = category;
-    });
-  }
-
+  ngOnInit() {}
 
   ionViewWillEnter(){
-    this.dataCtrl.setHomePage(true);
-    // do something when in moment home page opens
-    this.test()
+    const id_content = parseInt(this.route.snapshot.paramMap.get('id') || '1', 10);
+    this.getData(id_content);
   }
 
   ionViewWillLeave(){
     this.dataCtrl.setHomePage(false);
   }
 
-  /**
-   * This funcion get content from API node
-   */
-  async test(){
-
-      /**
-   
-      API nodes
-
-      /api/content/newest_contents_offline
-      - get the newest content
-
-      /api/content/contents_main_group_offline/
-      - get main categories of the contents
-
-      /api/content/contents_all_group_offline/
-      - get all categories of the contents
-
-      /api/content/contents_offline/?id=xxx&page_size=xxx&page=xxx
-      - get all contents from categorory
-
-      /api/content/content_offline/?id=xxx
-      - get content details
-
-      */
-
-
-    let url = '/api/content/contents_main_group_offline';
+  async getData(id_content: number){
+    const url_category = `/api/content/content_offline/?id=${id_content}`;
+    const url_articles = `/api/content/contents_offline/?id=${id_content}`;
 
     // show loader
     await this.dataCtrl.showLoader();
 
     // get data from server
-    let data = await this.dataCtrl.getServer(url, true, 20).catch(err => {
+    let category_data = await this.dataCtrl.getServer(url_category, true, 20).catch(err => {
       this.dataCtrl.parseErrorMessage(err).then(message => {
         this.dataCtrl.showToast(message.message, message.type);
         
@@ -90,40 +59,40 @@ export class CategoriesPage implements OnInit{
       return undefined;
     });
 
-    // hide loader
-    await this.dataCtrl.hideLoader();
+    if(category_data != undefined){
+      this.category = new ContentObject(category_data.data);
+    }
 
+    // get data from server
+    let articles_data = await this.dataCtrl.getServer(url_articles, true, 20).catch(err => {
+      this.dataCtrl.parseErrorMessage(err).then(message => {
+        this.dataCtrl.showToast(message.message, message.type);
+        
+        if(message.title == 'server_error'){
+          // take some action e.g logout, change page
+        }
+      });
+      return undefined;
+    });
 
-    if(data != undefined){
-      console.log('data is loaded', data.data);
-    
-      console.log('JSON data:', JSON.stringify(data.data));
-      data.data.map((item: ContentApiInterface) => {
+    if(articles_data != undefined){
+      this.contents = [];
+      articles_data.data.data.map((item: ContentApiInterface) => {
         this.contents.push(new ContentObject(item));
       });
-
     }
 
+    this.dataLoad = true;
+
+    // hide loader
+    await this.dataCtrl.hideLoader();
   }
 
- /* async initTranslate(){
+  openCategory(id: number){
+    this.router.navigateByUrl('/categories/' + id);
+  }
+
+  async initTranslate(){
     this.translate['test_string'] = await this.dataCtrl.translateWord("TEST.STRING");
-  }*/
-
-    formatedCategory() : string {
-      if (!this.selectedCategory || this.selectedCategory.length === 0) {
-        return '';
-      }
-  
-      return this.selectedCategory
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
-    }
-
-    goToTextPage(category: string) {
-      this.router.navigate(['/text'], { queryParams: { category } });
-    }
-
-
+  }
 }

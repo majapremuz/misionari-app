@@ -5,8 +5,8 @@ ion-footer {
 }
 
 ion-footer ion-toolbar {
-    --background: #E6E6E6;
-    padding: 1rem;
+    --background: #f5f5f5;
+    box-shadow: 0px 0px 10px #bcbaba;
 }
 
 ion-footer ion-toolbar > * {
@@ -18,8 +18,8 @@ ion-footer ion-toolbar > * {
 
 ion-button,
 ion-menu-button {
---background: #E6E6E6;
---color: #cd0140;
+--background: #f5f5f5;
+--color: #ab052b;
 --box-shadow: none;
 font-size: 1.2rem;
 }

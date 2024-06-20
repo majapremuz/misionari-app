@@ -6,7 +6,7 @@ import { ContentApiInterface, ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
 import { HeaderComponent } from 'src/app/pages/header/header.component';
 import { FooterComponent } from 'src/app/pages/footer/footer.component';
-import { MenuComponent } from 'src/app/pages/menu/menu.component';
+import { MenuComponent } from '../pages/menu/menu.component';
 import { CategoryService } from '../services/category.service';
 
 
@@ -46,7 +46,7 @@ export class TextPage implements OnInit {
     let article_data = await this.dataCtrl.getServer(url_category, true, 20).catch(err => {
       this.dataCtrl.parseErrorMessage(err).then(message => {
         this.dataCtrl.showToast(message.message, message.type);
-        
+        console.log(this.dataCtrl)
         if(message.title == 'server_error'){
           // take some action e.g logout, change page
         }

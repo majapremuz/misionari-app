@@ -1,8 +1,8 @@
 <app-header></app-header>
-<ion-content>
+<ion-content id="main-content">
 
 
-  <div class="main-container" id="main-content" *ngIf="dataLoad">
+  <div class="main-container" *ngIf="dataLoad">
     <div 
        class="hero-container" 
        [ngStyle]="{'background-image': 'url(' + category.content_image_obj?.full_url + ')'}">
@@ -10,7 +10,7 @@
     
     <div class="pictures">
       <div  *ngFor="let content of contents; let i = index" [ngClass]=" i % 2 ? 'liturgije' : 'svetkovine'">
-        <ion-card (click)="openArticle(content.content_id)">
+        <ion-card (click)="openCategory(content.content_id)">
           <ng-container *ngIf="content.content_has_image">
             <img [alt]="content.content_image_obj?.display_name" [src]="content.content_image_obj?.full_url_thumbnail2x" />
           </ng-container>

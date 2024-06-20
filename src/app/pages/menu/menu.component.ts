@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -15,58 +15,44 @@ import { ControllerService } from 'src/app/services/controller.service';
   imports: [IonicModule, CommonModule, FormsModule],
   standalone: true
 })
-export class MenuComponent  implements OnInit {
-
+export class MenuComponent implements OnInit {
   dataLoad: boolean = false;
-
   contents: Array<ContentObject> = [];
-
 
   constructor(
     private router: Router,
     private categoryService: CategoryService,
     private alertController: AlertController,
     private dataCtrl: ControllerService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loadData();
   }
 
-  async loadData(){
-    const url_articles = '/api/content/contents_main_group_offline'; // category id 70 is hardcoded in admin 
+  async loadData() {
+    const url_articles = '/api/content/contents_main_group_offline'; // category id 70 is hardcoded in admin
 
-    // get data from server
-    let articles_data = await this.dataCtrl.getServer(url_articles, true, 20).catch(err => {
-      this.dataCtrl.parseErrorMessage(err).then(message => {
-        this.dataCtrl.showToast(message.message, message.type);
-        
-        if(message.title == 'server_error'){
-          // take some action e.g logout, change page
-        }
-      });
-      return undefined;
-    });
-
-    if(articles_data != undefined){
-      this.contents = [];
-      articles_data.data.data.map((item: ContentApiInterface) => {
-        this.contents.push(new ContentObject(item));
-      });
+    try {
+      const articles_data = await this.dataCtrl.getServer(url_articles, true, 20);
+      this.contents = articles_data.data.data.map((item: ContentApiInterface) => new ContentObject(item));
+      this.dataLoad = true;
+    } catch (err) {
+      const message = await this.dataCtrl.parseErrorMessage(err);
+      this.dataCtrl.showToast(message.message, message.type);
+      if (message.title == 'server_error') {
+        // take some action e.g logout, change page
+      }
     }
-
-    this.dataLoad = true;
-
   }
 
   goToHomePage() {
     this.router.navigate(['/home']);
   }
 
-  selectCategory(id: number){
-    this.router.navigateByUrl('/text/' + id);
+  selectCategory(id: number) {
+     this.router.navigateByUrl('/categories/' + id);
   }
-
 
   async openSettings() {
     const alert = await this.alertController.create({
@@ -85,7 +71,7 @@ export class MenuComponent  implements OnInit {
         {
           text: 'Pretplata',
           handler: (selectedCategories: string[]) => {
-            //selectedCategories.forEach(category => this.pushNotificationService.subscribeToTopic(category));
+            // Handle subscription logic
           }
         }
       ]
@@ -93,5 +79,4 @@ export class MenuComponent  implements OnInit {
 
     await alert.present();
   }
-
 }
