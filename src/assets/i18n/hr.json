@@ -2,6 +2,10 @@
     "BUTTON": {
         "TEST": "Test"
     },
+    "HEADER": {
+        "TITLE": "Rijeka milosrđa",
+        "SUB_TITLE": "Zajednica Krvi Kristove"
+    },
     "TEST": {
         "STRING": "Test lng string"
     }

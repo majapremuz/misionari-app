@@ -29,3 +29,20 @@
     font-size: 0.85rem;
   }
 
+  .texts ion-item{
+    padding-bottom: 15px;
+
+    ion-thumbnail{
+      height: 80px;
+      width: 120px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+  }
+
+  .texts ion-item.first::part(native){
+    padding-left: 0px;
+  }
+
+
+

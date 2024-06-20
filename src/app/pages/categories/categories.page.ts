@@ -7,14 +7,13 @@ import { ContentApiInterface, ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
-import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.page.html',
   styleUrls: ['./categories.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent, MenuComponent]
+  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent]
 })
 export class CategoriesPage implements OnInit{
   dataLoad: boolean = false;
@@ -90,6 +89,15 @@ export class CategoriesPage implements OnInit{
 
   openCategory(id: number){
     this.router.navigateByUrl('/categories/' + id);
+  }
+
+  openText(content: ContentObject){
+    console.log(content);
+    if(content.content_type == 'category'){
+      this.router.navigateByUrl('/categories/' + content.content_id);
+    }else{
+      this.router.navigateByUrl('/text/' + content.content_id);
+    }
   }
 
   async initTranslate(){

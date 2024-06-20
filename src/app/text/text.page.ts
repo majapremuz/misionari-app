@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
-import { ContentApiInterface, ContentObject } from 'src/app/model/content';
+import { ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
 import { HeaderComponent } from 'src/app/pages/header/header.component';
 import { FooterComponent } from 'src/app/pages/footer/footer.component';
-import { MenuComponent } from '../pages/menu/menu.component';
-import { CategoryService } from '../services/category.service';
+import { NativeService } from '../services/native.service';
+import { environment } from 'src/environments/environment';
+import { ImageObject } from '../model/image';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { CategoryService } from '../services/category.service';
   templateUrl: './text.page.html',
   styleUrls: ['./text.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent, MenuComponent]
+  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent]
 })
 export class TextPage implements OnInit {
 
@@ -24,7 +25,8 @@ export class TextPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataCtrl: ControllerService
+    private dataCtrl: ControllerService,
+    private nativeCtrl: NativeService
   ) { }
 
   ngOnInit() {
@@ -65,6 +67,17 @@ export class TextPage implements OnInit {
     // hide loader
     await this.dataCtrl.hideLoader();
 
+  }
+
+  openAttachment(item: ImageObject){
+    let url = '';
+    if(item.image == true){
+      url = environment.rest_server.protokol + environment.rest_server.host + '/Assets/multimedia/original/' + item.full_url;
+    }else{
+      url = environment.rest_server.protokol + environment.rest_server.host + '/Assets/multimedia/' + item.multimedia_file;
+    }
+
+    this.nativeCtrl.openInBrowser(url);
   }
 
 

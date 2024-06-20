@@ -5,7 +5,6 @@ import { ContentApiInterface, ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
 import { HeaderComponent } from 'src/app/pages/header/header.component';
 import { FooterComponent } from 'src/app/pages/footer/footer.component';
-import { MenuComponent } from '../menu/menu.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent, MenuComponent]
+  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent]
 })
 export class HomePage {
 
@@ -96,7 +95,7 @@ export class HomePage {
     this.router.navigateByUrl('/categories/' + id);
   }
 
-   async initTranslate(){
+  async initTranslate(){
     this.translate['test_string'] = await this.dataCtrl.translateWord("TEST.STRING");
   }
 

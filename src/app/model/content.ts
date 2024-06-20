@@ -60,7 +60,7 @@ interface ContentInterface {
     content_has_child: boolean
 }
 
-enum ContentType {
+export enum ContentType {
     Content = 'content',
     Category = 'category'
 }
@@ -119,7 +119,7 @@ export class ContentObject implements ContentInterface{
 
 
         if(data.content_type != null){
-            if(data.content_type == 'content'){
+            if(data.content_type == 'text'){
                 this.content_type = ContentType.Content;
             }else{
                 this.content_type = ContentType.Category;
