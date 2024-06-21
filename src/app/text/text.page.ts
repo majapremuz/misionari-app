@@ -79,11 +79,4 @@ export class TextPage implements OnInit {
 
     this.nativeCtrl.openInBrowser(url);
   }
-
-
-/* async initTranslate(){
-  this.translate['test_string'] = await this.dataCtrl.translateWord("TEST.STRING");
-}*/
-
-
 }

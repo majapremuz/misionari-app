@@ -25,9 +25,7 @@ export class HomePage {
   constructor(
     private dataCtrl: ControllerService,
     private router: Router
-  ) {
-    /*this.initTranslate();*/
-  }
+  ) { }
 
 
   ionViewWillEnter(){
@@ -93,10 +91,6 @@ export class HomePage {
 
   openCategory(id: number){
     this.router.navigateByUrl('/categories/' + id);
-  }
-
-  async initTranslate(){
-    this.translate['test_string'] = await this.dataCtrl.translateWord("TEST.STRING");
   }
 
 }

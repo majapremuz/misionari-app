@@ -26,9 +26,11 @@ export class CategoriesPage implements OnInit{
     private dataCtrl: ControllerService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    //
+  }
 
   ionViewWillEnter(){
     const id_content = parseInt(this.route.snapshot.paramMap.get('id') || '1', 10);
@@ -100,7 +102,4 @@ export class CategoriesPage implements OnInit{
     }
   }
 
-  async initTranslate(){
-    this.translate['test_string'] = await this.dataCtrl.translateWord("TEST.STRING");
-  }
 }

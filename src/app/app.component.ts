@@ -89,23 +89,23 @@ export class AppComponent {
   }
 
   async openSettings() {
+    let categories: Array<any> = [];
+    this.contents.map((item, index) => {
+      categories.push(
+        {name: 'category' + index, type: 'checkbox', label: item.content_name, value: item.content_id}
+      )
+    })
     const alert = await this.alertController.create({
-      header: 'Odaberite kategorije',
-      inputs: [
-        { name: 'category1', type: 'checkbox', label: 'ŽIVA RIJEČ - EVANĐELJE DANA', value: 'ŽIVA RIJEČ - EVANĐELJE DANA' },
-        { name: 'category2', type: 'checkbox', label: 'S GAŠPAROM KROZ DAN', value: 'S GAŠPAROM KROZ DAN' },
-        { name: 'category3', type: 'checkbox', label: 'MARIJA DE MATTIAS GOVORI', value: 'MARIJA DE MATTIAS GOVORI' },
-        { name: 'category4', type: 'checkbox', label: 'MOLITVENIK DRAGOCJENE KRVI', value: 'MOLITVENIK DRAGOCJENE KRVI' },
-        { name: 'category5', type: 'checkbox', label: 'NAŠI SVECI', value: 'NAŠI SVECI' },
-        { name: 'category6', type: 'checkbox', label: 'NAŠE SVETKOVINE', value: 'NAŠE SVETKOVINE' },
-        { name: 'category7', type: 'checkbox', label: 'LITURGIJA ČASOVA', value: 'LITURGIJA ČASOVA' }
-      ],
+      header: await this.dataCtrl.translateWord("MENU.CHOOSE_CATEGORY"),
+      inputs: categories,
       buttons: [
-        { text: 'Prekid', role: 'cancel' },
+        { 
+          text: await this.dataCtrl.translateWord("MENU.CANCEL"),
+          role: 'cancel' },
         {
-          text: 'Pretplata',
+          text: await this.dataCtrl.translateWord("MENU.SUBSCRIBE"),
           handler: (selectedCategories: string[]) => {
-            // Handle subscription logic
+            console.log(selectedCategories);
           }
         }
       ]

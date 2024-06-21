@@ -6,7 +6,12 @@
         "TITLE": "Rijeka milosrđa",
         "SUB_TITLE": "Zajednica Krvi Kristove"
     },
-    "TEST": {
-        "STRING": "Test lng string"
+    "MENU": {
+        "HOME": "Početna stranica",
+        "SETTINGS": "Podešavanje aplikacije",
+        "MENU_EXIT": "Izlaz iz menija",
+        "CHOOSE_CATEGORY": "Odaberite kategorije",
+        "CANCEL": "Prekid",
+        "SUBSCRIBE": "Pretplata"
     }
 }
