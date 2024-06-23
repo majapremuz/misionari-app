@@ -136,6 +136,9 @@ export class AppComponent {
     const token = await this.dataCtrl._getNotificationTokenFromStorage();
     const url = `/api/notification/token_settings/?token=${token.token}`;
 
+    if(token.token == ''){
+      return [];
+    }
 
     let response = await this.dataCtrl.getServer(url).catch(err => {
       return undefined;
@@ -159,19 +162,24 @@ export class AppComponent {
       notification_state: JSON.stringify({content: categories})
     };
 
-    await this.dataCtrl.showLoader();
+    if(token.token != ''){
+      await this.dataCtrl.showLoader();
 
-    let response = await this.dataCtrl.postServer(url, data).catch(err => {
-      console.log(err);
-      return undefined;
-    })
-
-    if(response != undefined){
-      let tr_success = await this.dataCtrl.translateWord("MENU.SUBSCRIBE_SUCCESS");
-      this.dataCtrl.showToast(tr_success, AlertType.Success);
+      let response = await this.dataCtrl.postServer(url, data).catch(err => {
+        console.log(err);
+        return undefined;
+      })
+  
+      if(response != undefined){
+        let tr_success = await this.dataCtrl.translateWord("MENU.SUBSCRIBE_SUCCESS");
+        this.dataCtrl.showToast(tr_success, AlertType.Success);
+      }
+  
+      await this.dataCtrl.hideLoader();
+    }else{
+      let message = await this.dataCtrl.translateWord("MESSAGES.NO_TOKEN");
+      this.dataCtrl.showToast(message, AlertType.Danger);
     }
-
-    await this.dataCtrl.hideLoader();
   }
 
   goToHomePage() {

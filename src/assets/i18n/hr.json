@@ -14,5 +14,8 @@
         "CANCEL": "Prekid",
         "SUBSCRIBE": "Pretplata",
         "SUBSCRIBE_SUCCESS": "Uspješno ste postavili pretplatu"
+    },
+    "MESSAGES": {
+        "NO_TOKEN": "Slanje podataka nije uspjelo. Pokušajte nešto kasnije."
     }
 }
