@@ -1,12 +1,20 @@
 import { Component, ViewChild } from '@angular/core';
 import { AlertController, IonRouterOutlet, Platform } from '@ionic/angular';
 import { TranslateConfigService } from './services/translate-config.service';
-import { ControllerService } from './services/controller.service';
+import { AlertType, ControllerService } from './services/controller.service';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { ContentApiInterface, ContentObject } from './model/content';
+
+import {
+  ActionPerformed,
+  PushNotificationSchema,
+  PushNotifications,
+  Token,
+} from '@capacitor/push-notifications';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -89,10 +97,20 @@ export class AppComponent {
   }
 
   async openSettings() {
+
+    const state_settings = await this.getTokenSettings();
+
     let categories: Array<any> = [];
     this.contents.map((item, index) => {
+      let checked = false;
+      state_settings.map(state_id => {
+        if(state_id == item.content_id){
+          checked = true;
+        }
+      });
+
       categories.push(
-        {name: 'category' + index, type: 'checkbox', label: item.content_name, value: item.content_id}
+        {name: 'category' + index, type: 'checkbox', label: item.content_name, value: item.content_id, checked: checked}
       )
     })
     const alert = await this.alertController.create({
@@ -105,13 +123,55 @@ export class AppComponent {
         {
           text: await this.dataCtrl.translateWord("MENU.SUBSCRIBE"),
           handler: (selectedCategories: string[]) => {
-            console.log(selectedCategories);
+            this.sendCategories(selectedCategories);
           }
         }
       ]
     });
 
     await alert.present();
+  }
+
+  async getTokenSettings(): Promise<Array<number>>{
+    const token = await this.dataCtrl._getNotificationTokenFromStorage();
+    const url = `/api/notification/token_settings/?token=${token.token}`;
+
+
+    let response = await this.dataCtrl.getServer(url).catch(err => {
+      return undefined;
+    })
+
+    if(response != undefined){
+      return JSON.parse(response.data.token_content_settings).content;
+    }else{
+      return [];
+    }
+  }
+
+  async sendCategories(categories: any){
+    const url = '/api/notification/token_settings/';
+
+    const token = await this.dataCtrl._getNotificationTokenFromStorage();
+
+    const data = {
+      token: token.token,
+      company: environment.company_id,
+      notification_state: JSON.stringify({content: categories})
+    };
+
+    await this.dataCtrl.showLoader();
+
+    let response = await this.dataCtrl.postServer(url, data).catch(err => {
+      console.log(err);
+      return undefined;
+    })
+
+    if(response != undefined){
+      let tr_success = await this.dataCtrl.translateWord("MENU.SUBSCRIBE_SUCCESS");
+      this.dataCtrl.showToast(tr_success, AlertType.Success);
+    }
+
+    await this.dataCtrl.hideLoader();
   }
 
   goToHomePage() {
@@ -128,12 +188,57 @@ export class AppComponent {
       //await StatusBar.setStyle({ style: Style.Light });
 
       // pokreni inicijalizaciju notifikacija
-      // await this.initNotifications();
+      await this.initNotifications();
     }
 
     // izvrisit sve provjere i funkcije prije ove funkcije
     // jer tek kad se pokrene ova funkcija dozvoljava se 
     // pokretanje prve stranice
     this.dataCtrl.setReadyPage();
+  }
+
+  async initNotifications(){
+    //this.dataCtrl.setNotificationToken(token);
+    let result = await PushNotifications.requestPermissions();
+    if (result.receive === 'granted') {
+      await PushNotifications.register();
+      this.addNotificationsListener();
+    } else {
+      // Show some error
+    }
+  }
+
+  addNotificationsListener(){
+    PushNotifications.addListener('registration', (token: Token) => {
+      // Push Notifications registered successfully.
+      // Send token details to API to keep in DB.
+      console.log(token);
+      this.dataCtrl.setNotificationToken(token.value);
+    });
+
+    PushNotifications.addListener('registrationError', (error: any) => {
+      // Handle push notification registration error here.
+      console.log('Notification registrationError');
+
+    });
+
+    PushNotifications.addListener(
+      'pushNotificationReceived',
+      (notification: PushNotificationSchema) => {
+        // Show the notification payload if the app is open on the device.
+      }
+    );
+
+    PushNotifications.addListener(
+        'pushNotificationActionPerformed',
+        (notification: ActionPerformed) => {
+          // Implement the needed action to take when user tap on a notification.
+          if(notification.actionId == 'tap'){
+            //
+          }
+
+          console.log('notification-tap', notification);
+        }
+    );
   }
 }

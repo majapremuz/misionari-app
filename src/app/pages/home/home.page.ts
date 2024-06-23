@@ -27,6 +27,14 @@ export class HomePage {
     private router: Router
   ) { }
 
+  // async sendToken(token:string){
+  //   this.dataCtrl.showLoader();
+  //   await this.dataCtrl.setNotificationToken(token).catch(err => {
+  //     console.log(err);
+  //   });
+  //   this.dataCtrl.hideLoader();
+  // }
+
 
   ionViewWillEnter(){
     this.dataCtrl.setHomePage(true);

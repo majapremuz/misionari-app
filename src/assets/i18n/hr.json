@@ -12,6 +12,7 @@
         "MENU_EXIT": "Izlaz iz menija",
         "CHOOSE_CATEGORY": "Odaberite kategorije",
         "CANCEL": "Prekid",
-        "SUBSCRIBE": "Pretplata"
+        "SUBSCRIBE": "Pretplata",
+        "SUBSCRIBE_SUCCESS": "Uspješno ste postavili pretplatu"
     }
 }
