@@ -3,6 +3,7 @@
   <div class="container" *ngIf = 'dataLoad'>
     <h1>{{ content.content_name }}</h1>
     <div
+    *ngIf="content.content_has_image"
     class="hero-container" 
     [ngStyle]="{'background-image': 'url(' + content.content_image_obj?.full_url + ')'}">
     </div>

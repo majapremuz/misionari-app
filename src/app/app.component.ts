@@ -79,12 +79,39 @@ export class AppComponent {
  }
 
   async loadData() {
-    const url_articles = '/api/content/contents_offline/?id=70'; // category id 70 is hardcoded in admin
+
+    const url_main_category = '/api/content/contents_main_group_offline'; 
+
+    // get data from server
+    let main_category = await this.dataCtrl.getServer(url_main_category, true, 20).catch(err => {
+      this.dataCtrl.parseErrorMessage(err).then(message => {
+        this.dataCtrl.showToast(message.message, message.type);
+        
+        if(message.title == 'server_error'){
+          // take some action e.g logout, change page
+        }
+      });
+      return undefined;
+    });
+
+    let id = 0;
+    if(main_category != undefined){
+      main_category.data.data.map((item: ContentApiInterface)  => {
+        let category = new ContentObject(item);
+        if(id == 0){
+          id = category.content_id;
+        }
+        if(category.content_id < id){
+          id = category.content_id;
+        }
+      })
+    }
+
+
+    const url_articles = `/api/content/contents_offline/?id=${id}`;
 
     try {
       const articles_data = await this.dataCtrl.getServer(url_articles, true, 20);
-
-      console.log(articles_data.data);
       this.contents = articles_data.data.data.map((item: ContentApiInterface) => new ContentObject(item));
       this.dataLoad = true;
     } catch (err) {
@@ -145,7 +172,12 @@ export class AppComponent {
     })
 
     if(response != undefined){
-      return JSON.parse(response.data.token_content_settings).content;
+      let obj = JSON.parse(response.data.token_content_settings);
+      if(obj != null){
+        return JSON.parse(response.data.token_content_settings).content;
+      }else{
+        return [];
+      }
     }else{
       return [];
     }

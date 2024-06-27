@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.misionari.prolink;
 
 import com.getcapacitor.BridgeActivity;
 
