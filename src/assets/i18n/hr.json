@@ -17,5 +17,11 @@
     },
     "MESSAGES": {
         "NO_TOKEN": "Slanje podataka nije uspjelo. Pokušajte nešto kasnije."
+    },
+    "UPDATE": {
+        "TITLE": "Nova verzija",
+        "SUB_TITLE": "Objavljena je nova verzija aplikacije",
+        "TEXT": "Kako bi ova aplikcaija imala sve posljednje dodane mogučnosti i funkcioalnosti potrebno je instalirati posljednju verziju aplikacije. Posljednju verziju aplikacije možete instalirati u trgovini aplikacija na vašem pametnom mobilnom telefonu.",
+        "ACTION": "Uredu"
     }
 }

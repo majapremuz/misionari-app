@@ -15,6 +15,7 @@ import {
   Token,
 } from '@capacitor/push-notifications';
 import { environment } from 'src/environments/environment';
+import { CompanySettingsApiInterface, CompanySettingsObject } from './model/app_settings';
 
 @Component({
   selector: 'app-root',
@@ -68,6 +69,8 @@ export class AppComponent {
     // kreiranje ionic storage
     await this.dataCtrl.initFunc();
 
+    await this.getAppSettings();
+
     this.setReadyPage();
 
     this.loadData();
@@ -78,6 +81,48 @@ export class AppComponent {
     this.router.navigateByUrl('/categories/' + id);
  }
 
+ async getAppSettings(){
+  const url = '/api/user/app_settings/';
+
+  // get data from server
+  let app_settings = await this.dataCtrl.getServer(url, true, 20).catch(err => {
+    this.dataCtrl.parseErrorMessage(err).then(message => {
+      //this.dataCtrl.showToast(message.message, message.type);
+      
+      if(message.title == 'server_error'){
+        // take some action e.g logout, change page
+      }
+    });
+    return undefined;
+  });
+
+  if(app_settings != undefined){
+    
+    let settings_object = new CompanySettingsObject(app_settings.data);
+  
+
+    if(settings_object.show_message == true){
+      let show_message = await this.dataCtrl.getStorage('UPDATE_MESSAGE');
+
+      if(show_message != 'SET'){
+          await this.dataCtrl.setStorage('UPDATE_MESSAGE', 'SET');
+          const alert = await this.alertController.create({
+            header: await this.dataCtrl.translateWord("UPDATE.TITLE"),
+            subHeader: await this.dataCtrl.translateWord("UPDATE.SUB_TITLE") + ' v' + settings_object.company_app_version_display,
+            message: await this.dataCtrl.translateWord("UPDATE.TEXT"),
+            buttons: [await this.dataCtrl.translateWord("UPDATE.ACTION")],
+          });
+          await alert.present();
+      }
+    }
+    
+    // if(settings_object.show_update_page == true){
+    //   // open update page
+    // }
+  }
+
+ }
+
   async loadData() {
 
     const url_main_category = '/api/content/contents_main_group_offline'; 
@@ -85,7 +130,7 @@ export class AppComponent {
     // get data from server
     let main_category = await this.dataCtrl.getServer(url_main_category, true, 20).catch(err => {
       this.dataCtrl.parseErrorMessage(err).then(message => {
-        this.dataCtrl.showToast(message.message, message.type);
+        //this.dataCtrl.showToast(message.message, message.type);
         
         if(message.title == 'server_error'){
           // take some action e.g logout, change page

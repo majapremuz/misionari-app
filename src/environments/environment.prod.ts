@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  app_version: 104,
   cache: true,
   client_id: "RijekeMilosrdja",
   client_password: "RijekeMilosrdjaPristup",
