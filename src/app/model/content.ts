@@ -5,6 +5,18 @@ import { UserApiInterface } from "./user";
 
 let dateService = new DateService();
 
+interface ContentSegmentApiInterface {
+    images_v2: Array<ImageApiInterface> | null
+    segment_description: string | null
+    segment_title: string | null
+}
+
+interface ContentSegmentInterface {
+    images_v2: Array<ImageObject> | null
+    segment_description: string | null
+    segment_title: string | null
+}
+
 export interface ContentApiInterface {
     content_id: number
     content_uid: number
@@ -23,7 +35,7 @@ export interface ContentApiInterface {
     content_attachment_key: number
     content_attachment_key_obj: Array<ImageApiInterface> | null
     content_description: any
-    segments: any[]
+    segments: Array<ContentSegmentApiInterface> | null
     content_image_obj: ImageApiInterface
     content_company_id_obj: CompanyApiInterface[]
     content_uid_obj: UserApiInterface[]
@@ -49,7 +61,7 @@ interface ContentInterface {
     content_attachment_key: number
     content_attachment_key_obj: Array<ImageObject> | null
     content_description: string | null
-    segments: any[]
+    segments: Array<ContentSegmentInterface> | null
     content_image_obj: ImageObject | null
     content_has_image: boolean
     content_company_id_obj: CompanyObject | null
@@ -99,7 +111,7 @@ export class ContentObject implements ContentInterface{
         this.content_main_group = data.content_main_group;
         this.content_attachment_key = data.content_attachment_key;
         this.content_description = data.content_description;
-        this.segments = data.segments;
+        this.segments = [];
         this.moderators = data.moderators;
         this.content_path = data.content_path;
         this.content_parent_level = data.content_parent_level;
@@ -142,6 +154,21 @@ export class ContentObject implements ContentInterface{
                 );
             })
             
+        }
+
+        if(data.segments != null && data.segments.length > 0){
+            data.segments.map(item => {
+                let images: Array<ImageObject> = [];
+                item.images_v2?.map(item_img => {
+                    images.push(new ImageObject(item_img));
+                });
+
+                this.segments.push({
+                    images_v2: images,
+                    segment_description: item.segment_description,
+                    segment_title: item.segment_title
+                });
+            })
         }
 
         if(data.content_company_id_obj != null){

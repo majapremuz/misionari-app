@@ -29,3 +29,26 @@
   .attachment-container{
     padding-top: 15px;
   }
+
+  .images_container{
+    width: 100%;
+    margin-left: 20%;
+
+    .text_image{
+      width: 80%;
+  
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+  
+      img{
+        width: 100%;
+      }
+    }
+  }
+
+  app-footer{
+    height: 80px !important;
+  }
+
+
