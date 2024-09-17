@@ -40,14 +40,7 @@
       margin-bottom: 0px;
     }
   }
-
-  .texts ion-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; 
-    object-position: center;
-  }
-
+  
   .texts ion-item.first::part(native){
     padding-left: 0px;
   }

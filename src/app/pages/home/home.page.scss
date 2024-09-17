@@ -21,6 +21,7 @@
   height: 100%;
   object-fit: contain;
   object-position: center;
+  padding: 1rem auto;
 }
 
 .liturgije,
@@ -36,20 +37,15 @@ app-footer{
 ion-card {
   width: 43vw;
   margin: 1rem;
-  display: flex;      
-  justify-content: center;   
-  align-items: center;     
-  overflow: hidden; 
 }
 
 ion-card img {
-  width: auto;             
-  height: 50%;            
-  object-fit: contain;         
-  object-position: center;  
-  border-radius: 8px; 
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 8px;
 }
-
 
 p {
   text-align: center;
