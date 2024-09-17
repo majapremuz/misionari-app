@@ -1,0 +1,22 @@
+<app-header></app-header>
+<ion-content id="main-content">
+
+  <div class="main-container" *ngIf="dataLoad">
+    <div 
+       class="hero-container" 
+       [ngStyle]="{'background-image': 'url(' + category.content_image_obj?.full_url + ')'}">
+    </div>
+    
+    <div class="pictures">
+      <div  *ngFor="let content of contents; let i = index" [ngClass]=" i % 2 ? 'liturgije' : 'svetkovine'">
+        <ion-card (click)="openCategory(content.content_id)">
+          <ng-container *ngIf="content.content_has_image">
+            <img [alt]="content.content_image_obj?.display_name" [src]="content.content_image_obj?.full_url_thumbnail2x" />
+          </ng-container>
+        </ion-card>
+        <p>{{ content.content_name }}</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<app-footer></app-footer>

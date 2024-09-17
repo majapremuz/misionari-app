@@ -1,0 +1,27 @@
+{
+    "BUTTON": {
+        "TEST": "Test"
+    },
+    "HEADER": {
+        "TITLE": "Rijeka milosrđa",
+        "SUB_TITLE": "Zajednica Krvi Kristove"
+    },
+    "MENU": {
+        "HOME": "Početna stranica",
+        "SETTINGS": "Podešavanje aplikacije",
+        "MENU_EXIT": "Izlaz iz menija",
+        "CHOOSE_CATEGORY": "Odaberite kategorije",
+        "CANCEL": "Prekid",
+        "SUBSCRIBE": "Pretplata",
+        "SUBSCRIBE_SUCCESS": "Uspješno ste postavili pretplatu"
+    },
+    "MESSAGES": {
+        "NO_TOKEN": "Slanje podataka nije uspjelo. Pokušajte nešto kasnije."
+    },
+    "UPDATE": {
+        "TITLE": "Nova verzija",
+        "SUB_TITLE": "Objavljena je nova verzija aplikacije",
+        "TEXT": "Kako bi ova aplikcaija imala sve posljednje dodane mogučnosti i funkcioalnosti potrebno je instalirati posljednju verziju aplikacije. Posljednju verziju aplikacije možete instalirati u trgovini aplikacija na vašem pametnom mobilnom telefonu.",
+        "ACTION": "Uredu"
+    }
+}

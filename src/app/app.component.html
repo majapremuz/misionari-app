@@ -1,0 +1,36 @@
+<ion-app>
+  <ion-split-pane when="md" contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay" side="start" color="primary" class="ion-no-padding">
+      <ion-content class="ion-no-padding container">
+        <div class="container">
+    
+          <img src="assets/menu-img.jpeg" alt="logo img" class="menu-img">
+
+          <ion-menu-toggle style="text-align: center;">
+            <ion-button class="menuBtn" (click)="goToHomePage()">
+              <span class="ion-text-left">{{ "MENU.HOME" | translate }}</span>
+            </ion-button> 
+        
+            <ng-container *ngIf="dataLoad">
+              <ion-button *ngFor="let item of contents" class="menuBtn" (click)="selectCategory(item.content_id)">
+                <span class="ion-text-left">{{ item.content_name }}</span>
+              </ion-button> 
+            </ng-container>
+          </ion-menu-toggle>
+ 
+           
+          <ion-button class="menuBtn" (click)="openSettings()">
+            <span class="ion-text-left">{{ "MENU.SETTINGS" | translate }}</span>
+          </ion-button> 
+      
+          <ion-menu-toggle>
+            <ion-button class="exitBtn">
+              <span class="ion-text-left">{{ "MENU.MENU_EXIT" | translate }}</span>
+            </ion-button> 
+          </ion-menu-toggle>
+         </div>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

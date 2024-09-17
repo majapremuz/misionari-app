@@ -1,0 +1,26 @@
+<app-header></app-header>
+<ion-content [fullscreen]="true" id="main-content">
+  <div class="container" *ngIf="dataLoad">
+    <div>
+      <h1>{{ category.content_name }}</h1>
+    </div>
+
+    <div
+    class="hero-container"
+    [ngStyle]="{'background-image': 'url(' + category.content_image_obj?.full_url + ')'}">
+    </div>
+
+  <div class="ion-padding texts">
+      <ion-list class="ion-no-padding">
+        <ion-item (click)="openText(content)" *ngFor="let content of contents; let i = index" color="text-item" lines="none" [class.first]="i == 0 && content.content_has_image">
+          <ion-thumbnail aria-hidden="true" slot="start" *ngIf="i == 0 && content.content_has_image">
+            <img alt="thumbnail image" [src]="content.content_image_obj?.full_url" />
+          </ion-thumbnail>
+          <ion-label>{{ content.content_name }}</ion-label>
+        </ion-item>
+      </ion-list>
+  </div>
+</div>
+
+</ion-content>
+<app-footer></app-footer>

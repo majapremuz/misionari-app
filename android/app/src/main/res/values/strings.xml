@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Rijeke milosrđa</string>
+    <string name="title_activity_main">Rijeke milosrđa</string>
+    <string name="package_name">com.misionari.prolink</string>
+    <string name="custom_url_scheme">com.misionari.prolink</string>
+</resources>

@@ -1,0 +1,54 @@
+<app-header></app-header>
+<ion-content id="main-content">
+  <div class="container" *ngIf = 'dataLoad'>
+    <h1>{{ content.content_name }}</h1>
+    <div
+    *ngIf="content.content_has_image"
+    class="hero-container" 
+    [ngStyle]="{'background-image': 'url(' + content.content_image_obj?.full_url + ')'}">
+    </div>
+
+    <div class="attachment-container ion-padding">
+      <ng-container *ngIf="content.content_attachment_key_obj != null">
+        <ion-list class="ion-no-padding" *ngFor="let attachment of content.content_attachment_key_obj">
+          <ion-item (click)="openAttachment(attachment)" color="text-item" lines="none">
+            <ion-label>{{ attachment.multimedia_file_old }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+    </div>
+
+    <div class="text-container"  *ngIf = 'dataLoad'>
+      <ng-container *ngIf="content.segments.length > 0">
+        <ng-container *ngFor="let segment of content.segments">
+          <h2 *ngIf="segment.segment_title != ''">{{ segment.segment_title }}</h2>
+          <p>{{ segment.segment_description }}</p>
+          <ng-container *ngIf="segment.images_v2.length > 0">
+            <div class="images_container">
+              <ng-container *ngFor="let segment_img of segment.images_v2">
+                <div class="text_image">
+                  <img [src]="segment_img.full_url" [alt]="segment_img.display_name"/>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ion-content>
+<app-footer></app-footer>
+
+<!-- <ion-footer>
+  <ion-toolbar>
+    <div class="btn-container">
+      <ion-button (click)="backButtonEvent()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="clickToHomePage()">
+        <ion-icon name="home-outline"></ion-icon>
+      </ion-button>
+      <ion-menu-button class="menuBtn"></ion-menu-button> 
+    </div>
+  </ion-toolbar>
+</ion-footer> -->
