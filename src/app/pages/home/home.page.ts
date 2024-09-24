@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { ContentApiInterface, ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
-import { HeaderComponent } from 'src/app/pages/header/header.component';
-import { FooterComponent } from 'src/app/pages/footer/footer.component';
+import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent]
+  imports: [IonicModule, CommonModule, FooterComponent]
 })
 export class HomePage {
 

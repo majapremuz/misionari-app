@@ -20,7 +20,7 @@ const routes: Routes = [
   },
   {
     path: 'text/:id',
-    loadChildren: () => import('./text/text.module').then( m => m.TextPageModule),
+    loadChildren: () => import('./pages/text/text.module').then( m => m.TextPageModule),
     canLoad: [ReadyPageGuard]
   },
 ];

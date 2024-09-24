@@ -4,11 +4,10 @@ import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
-import { HeaderComponent } from 'src/app/pages/header/header.component';
-import { FooterComponent } from 'src/app/pages/footer/footer.component';
-import { NativeService } from '../services/native.service';
+import { FooterComponent } from 'src/app/components/footer/footer.component';
+import { NativeService } from '../../services/native.service';
 import { environment } from 'src/environments/environment';
-import { ImageObject } from '../model/image';
+import { ImageObject } from '../../model/image';
 
 
 @Component({
@@ -16,7 +15,7 @@ import { ImageObject } from '../model/image';
   templateUrl: './text.page.html',
   styleUrls: ['./text.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent]
+  imports: [IonicModule, CommonModule, FooterComponent]
 })
 export class TextPage implements OnInit {
 

@@ -5,15 +5,14 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { ContentApiInterface, ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
+import { FooterComponent } from '../../components/footer/footer.component';
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.page.html',
   styleUrls: ['./categories.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, HeaderComponent, FooterComponent]
+  imports: [IonicModule, CommonModule, FooterComponent]
 })
 export class CategoriesPage implements OnInit{
   dataLoad: boolean = false;
