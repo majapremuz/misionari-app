@@ -21,7 +21,7 @@
       <ng-container *ngIf="content.segments.length > 0">
         <ng-container *ngFor="let segment of content.segments">
           <h2 *ngIf="segment.segment_title != ''">{{ segment.segment_title }}</h2>
-          <p>{{ segment.segment_description }}</p>
+          <div [innerHTML]="segment.segment_description" class="text_wrap"></div>
           <ng-container *ngIf="segment.images_v2.length > 0">
             <div class="images_container">
               <ng-container *ngFor="let segment_img of segment.images_v2">
