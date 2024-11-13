@@ -16,6 +16,7 @@ import {
 } from '@capacitor/push-notifications';
 import { environment } from 'src/environments/environment';
 import { CompanySettingsApiInterface, CompanySettingsObject } from './model/app_settings';
+import { BaseModal } from './model/modal';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,8 @@ export class AppComponent {
   @ViewChild(IonRouterOutlet, { static: false }) routerOutlet: IonRouterOutlet | undefined;
   dataLoad: boolean = false;
   contents: Array<ContentObject> = [];
+
+  subscribeModal= new BaseModal();
   
   constructor(
     private router: Router,
@@ -153,6 +156,7 @@ export class AppComponent {
     }
 
 
+    //const url_articles = `/api/content/group_of_group_offline/`;
     const url_articles = `/api/content/contents_offline/?id=${id}`;
 
     try {
@@ -168,40 +172,95 @@ export class AppComponent {
     }
   }
 
-  async openSettings() {
+  async openSettings_old(){
+    let title = await this.dataCtrl.translateWord("MENU.CHOOSE_CATEGORY")
+    this.subscribeModal.title = title;
+    this.subscribeModal.openModal();
 
     const state_settings = await this.getTokenSettings();
 
-    let categories: Array<any> = [];
-    this.contents.map((item, index) => {
-      let checked = false;
-      state_settings.map(state_id => {
-        if(state_id == item.content_id){
-          checked = true;
+    console.log(state_settings);
+
+
+  }
+
+  async openSettings() {
+    const token = await this.dataCtrl._getNotificationTokenFromStorage();
+    let token_str = token.token;
+
+    if(token_str != ''){
+      const state_settings = await this.getSubContent();
+
+
+      let categories: Array<any> = [];
+      this.contents.map((item, index) => {
+
+        if(item.content_type == 'category'){
+          let checked = false;
+          state_settings.map(state_id => {
+            if(state_id == item.content_id){
+              checked = true;
+            }
+          });
+
+          categories.push(
+            {name: 'category' + index, type: 'checkbox', label: item.content_name, value: item.content_id, checked: checked}
+          )
         }
       });
 
-      categories.push(
-        {name: 'category' + index, type: 'checkbox', label: item.content_name, value: item.content_id, checked: checked}
-      )
-    })
-    const alert = await this.alertController.create({
-      header: await this.dataCtrl.translateWord("MENU.CHOOSE_CATEGORY"),
-      inputs: categories,
-      buttons: [
-        { 
-          text: await this.dataCtrl.translateWord("MENU.CANCEL"),
-          role: 'cancel' },
-        {
-          text: await this.dataCtrl.translateWord("MENU.SUBSCRIBE"),
-          handler: (selectedCategories: string[]) => {
-            this.sendCategories(selectedCategories);
+      const alert = await this.alertController.create({
+        header: await this.dataCtrl.translateWord("MENU.CHOOSE_CATEGORY"),
+        inputs: categories,
+        buttons: [
+          { 
+            text: await this.dataCtrl.translateWord("MENU.CANCEL"),
+            role: 'cancel' },
+          {
+            text: await this.dataCtrl.translateWord("MENU.SUBSCRIBE"),
+            handler: (selectedCategories: string[]) => {
+              this.sendCategories(selectedCategories);
+            }
           }
-        }
-      ]
+        ]
+      });
+
+      await alert.present();
+    }else{
+      let message = await this.dataCtrl.translateWord("MESSAGES.NO_TOKEN");
+      this.dataCtrl.showToast(message, AlertType.Danger);
+    }
+  }
+
+  async getSubContent(): Promise<Array<number>>{
+    const token = await this.dataCtrl._getNotificationTokenFromStorage();
+    //let token_str = 'testTOKEN5'; //token.token
+    let token_str = token.token;
+
+    const url = `/api/notification/content_subscribe/?token=${token_str}`;
+
+    if(token_str == ''){
+      return [];
+    }
+
+    let response = await this.dataCtrl.getServer(url).catch(err => {
+      return undefined;
     });
 
-    await alert.present();
+    if(response != undefined){
+      let data = response.data;
+      let data_array: Array<any> = [];
+
+      if(data.length > 0){
+        data.map((item: any) => {
+          data_array.push(item['id']);
+        });
+      };
+
+      return data_array;
+    }else{
+      return [];
+    }
   }
 
   async getTokenSettings(): Promise<Array<number>>{
@@ -229,29 +288,34 @@ export class AppComponent {
   }
 
   async sendCategories(categories: any){
-    const url = '/api/notification/token_settings/';
-
     const token = await this.dataCtrl._getNotificationTokenFromStorage();
+    //let token_str = 'testTOKEN5';
+    let token_str = token.token;
 
-    const data = {
-      token: token.token,
-      company: environment.company_id,
-      notification_state: JSON.stringify({content: categories})
-    };
+    let url = '/api/notification/content_subscribe/?token=' + token_str;
 
-    if(token.token != ''){
+    if(token_str != ''){
+
       await this.dataCtrl.showLoader();
 
-      let response = await this.dataCtrl.postServer(url, data).catch(err => {
-        console.log(err);
-        return undefined;
-      })
-  
-      if(response != undefined){
-        let tr_success = await this.dataCtrl.translateWord("MENU.SUBSCRIBE_SUCCESS");
-        this.dataCtrl.showToast(tr_success, AlertType.Success);
+      for (let i = 0; i < this.contents.length; i++) {
+        let item = this.contents[i];
+        url = url + '&content_id=' + item.content_id;
+
+
+        if(categories.includes(item.content_id)){
+          let response = await this.dataCtrl.putServer(url, []).catch(err => {
+            console.log(err);
+            return undefined;
+          });
+        }else{
+          let response = await this.dataCtrl.deleteServer(url).catch(err => {
+            console.log(err);
+            return undefined;
+          });
+        }
       }
-  
+
       await this.dataCtrl.hideLoader();
     }else{
       let message = await this.dataCtrl.translateWord("MESSAGES.NO_TOKEN");

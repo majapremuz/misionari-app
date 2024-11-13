@@ -50,7 +50,7 @@ export class HomePage {
     // show loader
     await this.dataCtrl.showLoader();
 
-    const url_main_category = '/api/content/contents_main_group_offline'; 
+    const url_main_category = '/api/content/contents_main_group_offline/'; 
 
     // get data from server
     let main_category = await this.dataCtrl.getServer(url_main_category, true, 20).catch(err => {
