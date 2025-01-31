@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  app_version: 111,
+  app_version: 113,
   cache: false,
   client_id: "testclient",
   client_password: "testpass",
