@@ -1,6 +1,6 @@
 <ion-content id="main-content">
 
-  <div class="main-container" *ngIf="dataLoad">
+  <div class="main-container top_space" *ngIf="dataLoad">
     <div 
        class="hero-container" 
        [ngStyle]="{'background-image': 'url(' + category.content_image_obj?.full_url + ')'}">
@@ -18,6 +18,9 @@
           </ion-card>
         </ion-item>
       </ion-list>
+    </div>
+    <div class="my_space">
+
     </div>
   </div>
 </ion-content>

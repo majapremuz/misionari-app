@@ -16,7 +16,10 @@
         "SUBSCRIBE_SUCCESS": "Uspješno ste postavili pretplatu"
     },
     "MESSAGES": {
-        "NO_TOKEN": "Slanje podataka nije uspjelo. Pokušajte nešto kasnije."
+        "NO_TOKEN": "Slanje podataka nije uspjelo. Pokušajte nešto kasnije.",
+        "NOTIFICATION_ENABLE": "Uključi obavjesti",
+        "NOTIFICATION_ALL": "Primaj obavjesti za sve grupe",
+        "NOTIFICATION_GROUP": "Odaberi grupe za koje želis primati obavjesti"
     },
     "UPDATE": {
         "TITLE": "Nova verzija",

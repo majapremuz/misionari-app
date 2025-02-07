@@ -8,6 +8,8 @@ ion-menu {
     align-items: center;
     flex-direction: column;
     background-color: #ffffff;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .menu-img {
@@ -33,11 +35,10 @@ ion-menu-toggle .exitBtn {
     --background: #ab052b;
     color: #fee7f4;
     font-weight: normal;
-    position: absolute;
+    //position: absolute;
     right: 10%;
 }
 
 span.ion-text-left {
     margin-right: auto;
 }
-    

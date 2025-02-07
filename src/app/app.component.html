@@ -1,5 +1,6 @@
 <ion-app>
-  <ion-split-pane when="md" contentId="main-content">
+
+
     <ion-menu contentId="main-content" type="overlay" side="start" color="primary" class="ion-no-padding">
       <ion-content class="ion-no-padding container">
         <div class="container">
@@ -16,42 +17,20 @@
                 <span class="ion-text-left">{{ item.content_name }}</span>
               </ion-button> 
             </ng-container>
-          </ion-menu-toggle>
- 
-           
-          <ion-button class="menuBtn" (click)="openSettings()">
-            <span class="ion-text-left">{{ "MENU.SETTINGS" | translate }}</span>
-          </ion-button> 
-      
-          <ion-menu-toggle>
+            
+            <ion-button class="menuBtn" (click)="openSettings()">
+              <span class="ion-text-left">{{ "MENU.SETTINGS" | translate }}</span>
+            </ion-button> 
+            
             <ion-button class="exitBtn">
               <span class="ion-text-left">{{ "MENU.MENU_EXIT" | translate }}</span>
             </ion-button> 
           </ion-menu-toggle>
+
+
          </div>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
-  </ion-split-pane>
 
-  <!-- token set modal -->
-  <ion-modal [isOpen]="subscribeModal.isModalOpen" (willDismiss)="subscribeModal.onModalWillDismiss($event)" cssClass="button-end">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-buttons slot="end" *ngIf="subscribeModal.showCloseButton">
-            <ion-button (click)="subscribeModal.closeModal()" fill="clear">
-              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-          <ion-title>
-            {{ subscribeModal.title }}
-          </ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        test
-      </ion-content>
-    </ng-template>
-  </ion-modal>
 </ion-app>

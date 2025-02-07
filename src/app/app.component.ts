@@ -172,155 +172,8 @@ export class AppComponent {
     }
   }
 
-  async openSettings_old(){
-    let title = await this.dataCtrl.translateWord("MENU.CHOOSE_CATEGORY")
-    this.subscribeModal.title = title;
-    this.subscribeModal.openModal();
-
-    const state_settings = await this.getTokenSettings();
-
-    console.log(state_settings);
-
-
-  }
-
-  async openSettings() {
-    const token = await this.dataCtrl._getNotificationTokenFromStorage();
-    let token_str = token.token;
-
-    if(token_str != ''){
-      const state_settings = await this.getSubContent();
-
-
-      let categories: Array<any> = [];
-      this.contents.map((item, index) => {
-
-        if(item.content_type == 'category'){
-          let checked = false;
-          state_settings.map(state_id => {
-            if(state_id == item.content_id){
-              checked = true;
-            }
-          });
-
-          categories.push(
-            {name: 'category' + index, type: 'checkbox', label: item.content_name, value: item.content_id, checked: checked}
-          )
-        }
-      });
-
-      const alert = await this.alertController.create({
-        header: await this.dataCtrl.translateWord("MENU.CHOOSE_CATEGORY"),
-        inputs: categories,
-        buttons: [
-          { 
-            text: await this.dataCtrl.translateWord("MENU.CANCEL"),
-            role: 'cancel' },
-          {
-            text: await this.dataCtrl.translateWord("MENU.SUBSCRIBE"),
-            handler: (selectedCategories: string[]) => {
-              this.sendCategories(selectedCategories);
-            }
-          }
-        ]
-      });
-
-      await alert.present();
-    }else{
-      let message = await this.dataCtrl.translateWord("MESSAGES.NO_TOKEN");
-      this.dataCtrl.showToast(message, AlertType.Danger);
-    }
-  }
-
-  async getSubContent(): Promise<Array<number>>{
-    const token = await this.dataCtrl._getNotificationTokenFromStorage();
-    //let token_str = 'testTOKEN5'; //token.token
-    let token_str = token.token;
-
-    const url = `/api/notification/content_subscribe/?token=${token_str}`;
-
-    if(token_str == ''){
-      return [];
-    }
-
-    let response = await this.dataCtrl.getServer(url).catch(err => {
-      return undefined;
-    });
-
-    if(response != undefined){
-      let data = response.data;
-      let data_array: Array<any> = [];
-
-      if(data.length > 0){
-        data.map((item: any) => {
-          data_array.push(item['id']);
-        });
-      };
-
-      return data_array;
-    }else{
-      return [];
-    }
-  }
-
-  async getTokenSettings(): Promise<Array<number>>{
-    const token = await this.dataCtrl._getNotificationTokenFromStorage();
-    const url = `/api/notification/token_settings/?token=${token.token}`;
-
-    if(token.token == ''){
-      return [];
-    }
-
-    let response = await this.dataCtrl.getServer(url).catch(err => {
-      return undefined;
-    })
-
-    if(response != undefined){
-      let obj = JSON.parse(response.data.token_content_settings);
-      if(obj != null){
-        return JSON.parse(response.data.token_content_settings).content;
-      }else{
-        return [];
-      }
-    }else{
-      return [];
-    }
-  }
-
-  async sendCategories(categories: any){
-    const token = await this.dataCtrl._getNotificationTokenFromStorage();
-    //let token_str = 'testTOKEN5';
-    let token_str = token.token;
-
-    let url = '/api/notification/content_subscribe/?token=' + token_str;
-
-    if(token_str != ''){
-
-      await this.dataCtrl.showLoader();
-
-      for (let i = 0; i < this.contents.length; i++) {
-        let item = this.contents[i];
-        url = url + '&content_id=' + item.content_id;
-
-
-        if(categories.includes(item.content_id)){
-          let response = await this.dataCtrl.putServer(url, []).catch(err => {
-            console.log(err);
-            return undefined;
-          });
-        }else{
-          let response = await this.dataCtrl.deleteServer(url).catch(err => {
-            console.log(err);
-            return undefined;
-          });
-        }
-      }
-
-      await this.dataCtrl.hideLoader();
-    }else{
-      let message = await this.dataCtrl.translateWord("MESSAGES.NO_TOKEN");
-      this.dataCtrl.showToast(message, AlertType.Danger);
-    }
+  async openSettings(){
+    this.router.navigate(['/settings']);
   }
 
   goToHomePage() {
@@ -335,6 +188,9 @@ export class AppComponent {
 
       // crna slova na statusbaru
       //await StatusBar.setStyle({ style: Style.Light });
+
+      // Display content under transparent status bar
+      //await StatusBar.setOverlaysWebView({ overlay: false });
 
       // pokreni inicijalizaciju notifikacija
       await this.initNotifications();
@@ -362,7 +218,7 @@ export class AppComponent {
       // Push Notifications registered successfully.
       // Send token details to API to keep in DB.
       console.log(token);
-      this.dataCtrl.setNotificationToken(token.value);
+      this.dataCtrl.setNotificationToken(token.value); 
     });
 
     PushNotifications.addListener('registrationError', (error: any) => {
@@ -383,7 +239,20 @@ export class AppComponent {
         (notification: ActionPerformed) => {
           // Implement the needed action to take when user tap on a notification.
           if(notification.actionId == 'tap'){
-            //
+            let notification_data = notification?.['notification']?.['data'] || null;
+            if(notification_data != null){
+              let action = notification_data?.['action'] || null;
+              let content_id = notification_data?.['content_id'] || null;
+              let parent_id = notification_data?.['parent_id'] || null;
+
+              if(action != null){
+                if(action == 'open_text' && content_id != null){
+                  this.router.navigateByUrl('/text/' + content_id);
+                }else if(action == 'open_parent' && parent_id != null){
+                  this.router.navigateByUrl('/categories/' + parent_id);
+                }
+              }
+            }
           }
 
           console.log('notification-tap', notification);

@@ -1,0 +1,23 @@
+<ion-content id="main-content-settings" class="ion-padding">
+
+  <ng-container *ngIf="dataLoad">
+    <div class="top_space">
+      <ion-list>
+        <ion-item>
+          <ion-toggle [(ngModel)]="notification_state" (ionChange)="toggleNotification($event)" [enableOnOffLabels]="true" justify="space-between" [disabled]="disableTogglers">{{ "MESSAGES.NOTIFICATION_ENABLE" | translate }}</ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-toggle [(ngModel)]="notification_subscript" (ionChange)="toggleNotificationSubscript($event)" [enableOnOffLabels]="true" justify="space-between" [disabled]="disableTogglers || disableSubscription">{{ "MESSAGES.NOTIFICATION_ALL" | translate }}</ion-toggle>
+        </ion-item>
+        <ion-button (click)="selectGroup()" color="primary" expand="full" size="small" style="margin-top: 25px;" [disabled]="notification_subscript || (disableTogglers || disableSubscription)">
+          {{ "MESSAGES.NOTIFICATION_GROUP" | translate }}
+        </ion-button>
+      </ion-list>
+
+    </div>
+
+  </ng-container>
+
+
+</ion-content>
+<app-footer></app-footer>

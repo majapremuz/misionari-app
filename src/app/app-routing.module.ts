@@ -9,11 +9,6 @@ const routes: Routes = [
     canLoad: [ReadyPageGuard]
   },
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
-  {
     path: 'categories/:id',
     loadChildren: () => import('./pages/categories/categories.module').then( m => m.CategoriesPageModule),
     canLoad: [ReadyPageGuard]
@@ -23,6 +18,16 @@ const routes: Routes = [
     loadChildren: () => import('./pages/text/text.module').then( m => m.TextPageModule),
     canLoad: [ReadyPageGuard]
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule),
+    canLoad: [ReadyPageGuard]
+  },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({

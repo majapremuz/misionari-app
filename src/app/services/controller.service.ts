@@ -603,6 +603,10 @@ export class ControllerService {
     await toast.present();
   }
 
+  async wait(sec: number){
+    await new Promise(resolve => setTimeout(resolve, sec * 1000));
+  }
+
   async showLoader(): Promise<void> {
     this.loader = await this.loadingCtrl.create({
       spinner: 'circles',

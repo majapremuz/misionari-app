@@ -1,6 +1,8 @@
-<ion-content id="main-content">
-  <div class="container" *ngIf = 'dataLoad'>
-    <h1>{{ content.content_name }}</h1>
+<ion-content [fullscreen]="true" id="main-content">
+  <div class="container top_space" *ngIf="dataLoad">
+    <div>
+      <h1>{{ content.content_name }}</h1>
+    </div>
     <div
     *ngIf="content.content_has_image"
     class="hero-container" 
@@ -34,6 +36,9 @@
         </ng-container>
       </ng-container>
     </div>
+  </div>
+  <div class="my_space">
+
   </div>
 </ion-content>
 <app-footer></app-footer>
