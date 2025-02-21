@@ -32,7 +32,7 @@ ion-item {
 }
 
 
-img {
+app-cached-image {
   width: 20%;
   height: 18vmin; 
 }
@@ -46,7 +46,7 @@ p {
 }
 
 @media only screen and (max-width: 395px) {
-  img {
+  app-cached-image {
     width: 25%;
     height: 19vmin; 
   }

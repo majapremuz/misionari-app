@@ -6,13 +6,15 @@ import { ActivatedRoute } from '@angular/router';
 import { ContentApiInterface, ContentObject } from 'src/app/model/content';
 import { ControllerService } from 'src/app/services/controller.service';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { CachedImageComponent } from 'src/app/components/cached-image/cached-image.component';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.page.html',
   styleUrls: ['./categories.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FooterComponent]
+  imports: [IonicModule, CommonModule, FooterComponent, CachedImageComponent]
 })
 export class CategoriesPage implements OnInit{
   dataLoad: boolean = false;
@@ -24,7 +26,8 @@ export class CategoriesPage implements OnInit{
   constructor(
     private dataCtrl: ControllerService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private contentCtrl: DataService
   ) { }
 
   ngOnInit() {
@@ -41,51 +44,17 @@ export class CategoriesPage implements OnInit{
   }
 
   async getData(id_content: number){
-    const url_category = `/api/content/content_offline/?id=${id_content}`;
-    const url_articles = `/api/content/contents_offline/?id=${id_content}`;
+    this.category = await this.contentCtrl.getContent(id_content);
+    let categories = await this.contentCtrl.getCategoryContent(id_content);
 
-    // show loader
-    await this.dataCtrl.showLoader();
-
-    // get data from server
-    let category_data = await this.dataCtrl.getServer(url_category, true, 20).catch(err => {
-      this.dataCtrl.parseErrorMessage(err).then(message => {
-        this.dataCtrl.showToast(message.message, message.type);
-        
-        if(message.title == 'server_error'){
-          // take some action e.g logout, change page
-        }
-      });
-      return undefined;
-    });
-
-    if(category_data != undefined){
-      this.category = new ContentObject(category_data.data);
-    }
-
-    // get data from server
-    let articles_data = await this.dataCtrl.getServer(url_articles, true, 20).catch(err => {
-      this.dataCtrl.parseErrorMessage(err).then(message => {
-        this.dataCtrl.showToast(message.message, message.type);
-        
-        if(message.title == 'server_error'){
-          // take some action e.g logout, change page
-        }
-      });
-      return undefined;
-    });
-
-    if(articles_data != undefined){
+    if(categories.length > 0){
       this.contents = [];
-      articles_data.data.data.map((item: ContentApiInterface) => {
-        this.contents.push(new ContentObject(item));
-      });
+      categories.map((item) => {
+        this.contents.push(item);
+      })
     }
 
     this.dataLoad = true;
-
-    // hide loader
-    await this.dataCtrl.hideLoader();
   }
 
   openCategory(id: number){
@@ -93,7 +62,6 @@ export class CategoriesPage implements OnInit{
   }
 
   openText(content: ContentObject){
-    console.log(content);
     if(content.content_type == 'category'){
       this.router.navigateByUrl('/categories/' + content.content_id);
     }else{

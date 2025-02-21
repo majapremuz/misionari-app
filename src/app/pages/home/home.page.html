@@ -12,7 +12,8 @@
         <ion-item *ngFor="let content of contents; let i = index" class="pictures">
           <ion-card (click)="openCategory(content.content_id)">
             <ng-container *ngIf="content.content_has_image">
-              <img [alt]="content.content_image_obj?.display_name" [src]="content.content_image_obj?.full_url_thumbnail2x" />
+              <app-cached-image [src]="content.content_image_obj?.full_url_thumbnail2x || ''"></app-cached-image>
+              <!-- <img [alt]="content.content_image_obj?.display_name" [src]="content.content_image_obj?.full_url_thumbnail2x" /> -->
             </ng-container>
             <p>{{ content.content_name }}</p>
           </ion-card>

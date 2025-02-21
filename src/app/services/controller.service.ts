@@ -5,12 +5,15 @@ import { BehaviorSubject, firstValueFrom, lastValueFrom, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 export interface ApiResult {
   data: any;
   message: string;
   status: boolean;
   status_code: number;
+  signature: string;
+  timestamp: string;
 }
 
 export interface ErrorMessage {
@@ -65,6 +68,13 @@ export class ControllerService {
   async initFunc(){
     await this.platform.ready();
     await this.createStorage();
+
+    await Filesystem.mkdir({
+      directory: Directory.Cache,
+      path: `CACHED-IMG`
+    }).catch(err => {
+      //
+    });
   }
 
   setReadyPage(){
@@ -328,30 +338,21 @@ export class ControllerService {
           this.http.get(apiURL, options).pipe(take(1))
         )
         .then((res: any) => {
-          if(cache == true){
-            let miliseconds = Date.now();
+          let miliseconds = Date.now();
 
-            let cache_data = {
-              key: environment.cache_key + url,
-              miliseconds: miliseconds,
-              res: res
-            };
+          let cache_data = {
+            key: environment.cache_key + url,
+            miliseconds: miliseconds,
+            res: res
+          };
 
-            this.setStorage(cache_data.key, JSON.stringify(cache_data)).then(() => {
-              if(res.status == true && res.data?.valid != false){
-                resolve(res);
-              }else{
-                reject({error: {error: 'server_error', error_description: res.message}, data: res});
-              }
-            });
-          }
-          else{
+          this.setStorage(cache_data.key, JSON.stringify(cache_data)).then(() => {
             if(res.status == true && res.data?.valid != false){
               resolve(res);
             }else{
               reject({error: {error: 'server_error', error_description: res.message}, data: res});
             }
-          }
+          });
         })
         .catch((err) => {
           if(err.status == 401){
@@ -559,13 +560,13 @@ export class ControllerService {
   }
 
 
-  private checkCache(key: string, cache_time: number): Promise<ApiResult>{
+  public checkCache(key: string, cache_time: number|null): Promise<ApiResult>{
     let promise = new Promise<ApiResult>((resolve, reject) => {
         this.getStorage(key).then(data_str => {
           if(data_str != null){
             let data = JSON.parse(data_str);
             let timeNow = Date.now();
-            if(data.miliseconds + cache_time >= timeNow){
+            if((data.miliseconds + cache_time >= timeNow) || cache_time == null){
               resolve(data.res);
             }
             else{

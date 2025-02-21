@@ -8,6 +8,7 @@ import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { NativeService } from '../../services/native.service';
 import { environment } from 'src/environments/environment';
 import { ImageObject } from '../../model/image';
+import { DataService } from 'src/app/services/data.service';
 
 
 @Component({
@@ -25,7 +26,8 @@ export class TextPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private dataCtrl: ControllerService,
-    private nativeCtrl: NativeService
+    private nativeCtrl: NativeService,
+    private contentCtrl: DataService
   ) { }
 
   ngOnInit() {
@@ -38,34 +40,10 @@ export class TextPage implements OnInit {
   }
 
   async getData(id: number){
-    const url_category = '/api/content/content_offline/?id=' + id;
+    this.content = await this.contentCtrl.getContent(id);
 
-    // show loader
-    await this.dataCtrl.showLoader();
-
-    // get data from server
-    let article_data = await this.dataCtrl.getServer(url_category, true, 20).catch(err => {
-      this.dataCtrl.parseErrorMessage(err).then(message => {
-        this.dataCtrl.showToast(message.message, message.type);
-        console.log(this.dataCtrl)
-        if(message.title == 'server_error'){
-          // take some action e.g logout, change page
-        }
-      });
-      return undefined;
-    });
-
-    if(article_data != undefined){
-      this.content = new ContentObject(article_data.data);
-
-      console.log(this.content);
-    }
-
+    console.log(this.content);
     this.dataLoad = true;
-
-    // hide loader
-    await this.dataCtrl.hideLoader();
-
   }
 
   openAttachment(item: ImageObject){

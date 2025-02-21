@@ -36,13 +36,14 @@ export interface ContentApiInterface {
     content_attachment_key_obj: Array<ImageApiInterface> | null
     content_description: any
     segments: Array<ContentSegmentApiInterface> | null
-    content_image_obj: ImageApiInterface
+    content_image_obj: Array<ImageApiInterface>
     content_company_id_obj: CompanyApiInterface[]
     content_uid_obj: UserApiInterface[]
     moderators: any
     content_path: string
     content_parent_level: number
     content_has_child: boolean
+    content_order: string
 }
 
 interface ContentInterface {
@@ -85,6 +86,7 @@ export class ContentObject implements ContentInterface{
     content_type: ContentType
     content_user_permission: number
     content_parent: ContentObject | null
+    content_parent_id: number | null
     content_main_group: number
     content_public_date: string | null
     content_show_autor: boolean
@@ -102,6 +104,8 @@ export class ContentObject implements ContentInterface{
     content_path: string
     content_parent_level: number
     content_has_child: boolean
+    content_order: number
+
 
     constructor(data: ContentApiInterface){
         this.content_id = data.content_id;
@@ -128,7 +132,8 @@ export class ContentObject implements ContentInterface{
         this.content_uid_obj = null;
         this.content_has_image = false;
         this.content_attachment_key_obj = null;
-
+        this.content_order = parseInt(data.content_order, 10);
+        this.content_parent_id = data.content_parent;
 
         if(data.content_type != null){
             if(data.content_type == 'text'){
@@ -142,9 +147,7 @@ export class ContentObject implements ContentInterface{
             this.content_parent = new ContentObject(data.content_parent);
         }
 
-        if(data.content_image_obj != null){
-            this.content_image_obj = new ImageObject(data.content_image_obj);
-        }
+
 
         if(data.content_attachment_key_obj != null){
             data.content_attachment_key_obj.map(item => {
@@ -176,7 +179,7 @@ export class ContentObject implements ContentInterface{
         }
 
         if(data.content_image_obj != null){
-            this.content_image_obj = new ImageObject(data.content_image_obj);
+            this.content_image_obj = new ImageObject(data.content_image_obj[0]);
             this.content_has_image = true;
         }else{
             this.content_has_image = false;

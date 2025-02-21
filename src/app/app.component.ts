@@ -17,6 +17,7 @@ import {
 import { environment } from 'src/environments/environment';
 import { CompanySettingsApiInterface, CompanySettingsObject } from './model/app_settings';
 import { BaseModal } from './model/modal';
+import { DataService } from './services/data.service';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +38,7 @@ export class AppComponent {
     public translateConfigService: TranslateConfigService,
     public dataCtrl: ControllerService,
     private alertController: AlertController,
+    private contentCtrl: DataService
   ) {
     this.initApp();
   }
@@ -126,50 +128,70 @@ export class AppComponent {
 
  }
 
-  async loadData() {
+ async loadData(){
+  let rootContent = await this.contentCtrl.getRootContent();
 
-    const url_main_category = '/api/content/contents_main_group_offline'; 
+  if(rootContent.length > 0){
+    let rootContent_id = rootContent[0]['content_id'];
 
-    // get data from server
-    let main_category = await this.dataCtrl.getServer(url_main_category, true, 20).catch(err => {
-      this.dataCtrl.parseErrorMessage(err).then(message => {
-        //this.dataCtrl.showToast(message.message, message.type);
-        
-        if(message.title == 'server_error'){
-          // take some action e.g logout, change page
-        }
-      });
-      return undefined;
-    });
+    let homePageCategory = await this.contentCtrl.getCategoryContent(rootContent_id);
 
-    let id = 0;
-    if(main_category != undefined){
-      main_category.data.data.map((item: ContentApiInterface)  => {
-        let category = new ContentObject(item);
-        if(id == 0){
-          id = category.content_id;
-        }
-        if(category.content_id < id){
-          id = category.content_id;
-        }
+    if(homePageCategory.length > 0){
+      this.contents = [];
+      homePageCategory.map((item) => {
+        this.contents.push(item);
       })
     }
 
+    this.dataLoad = true;
 
-    //const url_articles = `/api/content/group_of_group_offline/`;
-    const url_articles = `/api/content/contents_offline/?id=${id}`;
+  }
+ }
 
-    try {
-      const articles_data = await this.dataCtrl.getServer(url_articles, true, 20);
-      this.contents = articles_data.data.data.map((item: ContentApiInterface) => new ContentObject(item));
-      this.dataLoad = true;
-    } catch (err) {
-      const message = await this.dataCtrl.parseErrorMessage(err);
-      this.dataCtrl.showToast(message.message, message.type);
-      if (message.title == 'server_error') {
-        // take some action e.g logout, change page
-      }
-    }
+  async loadData_old() {
+
+    // const url_main_category = '/api/content/contents_main_group_offline'; 
+
+    // // get data from server
+    // let main_category = await this.dataCtrl.getServer(url_main_category, true, 20).catch(err => {
+    //   this.dataCtrl.parseErrorMessage(err).then(message => {
+    //     //this.dataCtrl.showToast(message.message, message.type);
+        
+    //     if(message.title == 'server_error'){
+    //       // take some action e.g logout, change page
+    //     }
+    //   });
+    //   return undefined;
+    // });
+
+    // let id = 0;
+    // if(main_category != undefined){
+    //   main_category.data.data.map((item: ContentApiInterface)  => {
+    //     let category = new ContentObject(item);
+    //     if(id == 0){
+    //       id = category.content_id;
+    //     }
+    //     if(category.content_id < id){
+    //       id = category.content_id;
+    //     }
+    //   })
+    // }
+
+
+    // //const url_articles = `/api/content/group_of_group_offline/`;
+    // const url_articles = `/api/content/contents_offline/?id=${id}`;
+
+    // try {
+    //   const articles_data = await this.dataCtrl.getServer(url_articles, true, 20);
+    //   this.contents = articles_data.data.data.map((item: ContentApiInterface) => new ContentObject(item));
+    //   this.dataLoad = true;
+    // } catch (err) {
+    //   const message = await this.dataCtrl.parseErrorMessage(err);
+    //   this.dataCtrl.showToast(message.message, message.type);
+    //   if (message.title == 'server_error') {
+    //     // take some action e.g logout, change page
+    //   }
+    // }
   }
 
   async openSettings(){

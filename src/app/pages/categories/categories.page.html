@@ -13,7 +13,9 @@
         <ion-list class="ion-no-padding">
           <ion-item (click)="openText(content)" *ngFor="let content of contents; let i = index" color="text-item" lines="none" [class.first]="content.content_has_image">
             <ion-thumbnail aria-hidden="true" slot="start" *ngIf="content.content_has_image">
-              <img alt="thumbnail image" [src]="content.content_image_obj?.full_url" />
+              <app-cached-image [src]="content.content_image_obj?.full_url || ''"></app-cached-image>
+
+              <!-- <img alt="thumbnail image" [src]="content.content_image_obj?.full_url" /> -->
             </ion-thumbnail>
             <ion-label>{{ content.content_name }}</ion-label>
           </ion-item>
