@@ -41,8 +41,6 @@ export class TextPage implements OnInit {
   ionViewWillEnter(){
     const id_content = parseInt(this.route.snapshot.paramMap.get('id') || '1', 10);
     this.getData(id_content);
-
-
   }
 
   async getData(id: number){

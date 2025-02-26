@@ -76,9 +76,9 @@ export class AppComponent {
 
     await this.getAppSettings();
 
-    this.setReadyPage();
+    await this.setReadyPage();
 
-    this.loadData();
+    await this.loadData();
 
   }
 

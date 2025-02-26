@@ -12,6 +12,7 @@ export class DataService {
   url: string = '/api/content/structure?pagination=0';
   content: Array<ContentObject> = [];
   content_signature: string = '';
+  loader: boolean = false;
 
   constructor(
     private apiCtrl: ControllerService
@@ -48,7 +49,7 @@ export class DataService {
     let url: string = this.url;
     let cache_time:number;
     if(environment.production) {
-      cache_time = 60*60*6; // 6 hours
+      cache_time = 60*60*2; // 6 hours
     }else{
       cache_time = 60 * 5; // 5sec
     }
@@ -79,9 +80,15 @@ export class DataService {
     let server: boolean = false;
     let cache: boolean = await this.checkCache();
     if(!cache){
-      await this.apiCtrl.showLoader();
+      if(this.loader == false){
+        await this.apiCtrl.showLoader();
+        this.loader = true;
+      }
       server = await this.checkServer();
-      await this.apiCtrl.hideLoader();
+      if(this.loader == true){
+        await this.apiCtrl.hideLoader();
+        this.loader = false;
+      }
     }
     else{
       this.checkServer();
