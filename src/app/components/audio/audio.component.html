@@ -1,0 +1,6 @@
+<ion-item lines="none">
+  <ion-range (ionChange)="seekPlay($event)" (ionInput)="userDragging($event)" [value]="sliderValue" labelPlacement="start" [label]="soundLabel"></ion-range>
+  <ion-button (click)="playSound()" slot="end" size="small">
+    <ion-icon aria-hidden="true" [name]="icon" slot="icon-only"></ion-icon>
+  </ion-button>
+</ion-item>

@@ -134,6 +134,7 @@ export class ContentObject implements ContentInterface{
         this.content_attachment_key_obj = null;
         this.content_order = parseInt(data.content_order, 10);
         this.content_parent_id = data.content_parent;
+        this.content_attachment_key_obj = [];
 
         if(data.content_type != null){
             if(data.content_type == 'text'){
@@ -147,16 +148,14 @@ export class ContentObject implements ContentInterface{
             this.content_parent = new ContentObject(data.content_parent);
         }
 
-
-
         if(data.content_attachment_key_obj != null){
             data.content_attachment_key_obj.map(item => {
-                this.content_attachment_key_obj = [];
-                this.content_attachment_key_obj.push(
-                    new ImageObject(item)
-                );
+                if(this.content_attachment_key_obj != null){
+                    this.content_attachment_key_obj.push(
+                        new ImageObject(item)
+                    );
+                }
             })
-            
         }
 
         if(data.segments != null && data.segments.length > 0){

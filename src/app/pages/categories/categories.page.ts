@@ -8,6 +8,7 @@ import { ControllerService } from 'src/app/services/controller.service';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { CachedImageComponent } from 'src/app/components/cached-image/cached-image.component';
 import { DataService } from 'src/app/services/data.service';
+import { NativeService } from 'src/app/services/native.service';
 
 @Component({
   selector: 'app-categories',
@@ -23,11 +24,14 @@ export class CategoriesPage implements OnInit{
   contents: Array<ContentObject> = [];
   category!: ContentObject;
 
+  main_image: string = '';
+
   constructor(
     private dataCtrl: ControllerService,
     private router: Router,
     private route: ActivatedRoute,
-    private contentCtrl: DataService
+    private contentCtrl: DataService,
+    private nativeCtrl: NativeService
   ) { }
 
   ngOnInit() {
@@ -53,6 +57,9 @@ export class CategoriesPage implements OnInit{
         this.contents.push(item);
       })
     }
+
+    //load cache image
+    this.main_image = await this.nativeCtrl.getImage(this.category.content_image_obj?.full_url || '');
 
     this.dataLoad = true;
   }

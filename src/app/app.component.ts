@@ -84,114 +84,66 @@ export class AppComponent {
 
   selectCategory(id: number) {
     this.router.navigateByUrl('/categories/' + id);
- }
-
- async getAppSettings(){
-  const url = '/api/user/app_settings/';
-
-  // get data from server
-  let app_settings = await this.dataCtrl.getServer(url, true, 20).catch(err => {
-    this.dataCtrl.parseErrorMessage(err).then(message => {
-      //this.dataCtrl.showToast(message.message, message.type);
-      
-      if(message.title == 'server_error'){
-        // take some action e.g logout, change page
-      }
-    });
-    return undefined;
-  });
-
-  if(app_settings != undefined){
-    
-    let settings_object = new CompanySettingsObject(app_settings.data);
-  
-
-    if(settings_object.show_message == true){
-      let show_message = await this.dataCtrl.getStorage('UPDATE_MESSAGE');
-
-      if(show_message != 'SET'){
-          await this.dataCtrl.setStorage('UPDATE_MESSAGE', 'SET');
-          const alert = await this.alertController.create({
-            header: await this.dataCtrl.translateWord("UPDATE.TITLE"),
-            subHeader: await this.dataCtrl.translateWord("UPDATE.SUB_TITLE") + ' v' + settings_object.company_app_version_display,
-            message: await this.dataCtrl.translateWord("UPDATE.TEXT"),
-            buttons: [await this.dataCtrl.translateWord("UPDATE.ACTION")],
-          });
-          await alert.present();
-      }
-    }
-    
-    // if(settings_object.show_update_page == true){
-    //   // open update page
-    // }
   }
 
- }
+  async getAppSettings(){
+    const url = '/api/user/app_settings/';
 
- async loadData(){
-  let rootContent = await this.contentCtrl.getRootContent();
-
-  if(rootContent.length > 0){
-    let rootContent_id = rootContent[0]['content_id'];
-
-    let homePageCategory = await this.contentCtrl.getCategoryContent(rootContent_id);
-
-    if(homePageCategory.length > 0){
-      this.contents = [];
-      homePageCategory.map((item) => {
-        this.contents.push(item);
-      })
-    }
-
-    this.dataLoad = true;
-
-  }
- }
-
-  async loadData_old() {
-
-    // const url_main_category = '/api/content/contents_main_group_offline'; 
-
-    // // get data from server
-    // let main_category = await this.dataCtrl.getServer(url_main_category, true, 20).catch(err => {
-    //   this.dataCtrl.parseErrorMessage(err).then(message => {
-    //     //this.dataCtrl.showToast(message.message, message.type);
+    // get data from server
+    let app_settings = await this.dataCtrl.getServer(url, true, 20).catch(err => {
+      this.dataCtrl.parseErrorMessage(err).then(message => {
+        //this.dataCtrl.showToast(message.message, message.type);
         
-    //     if(message.title == 'server_error'){
-    //       // take some action e.g logout, change page
-    //     }
-    //   });
-    //   return undefined;
-    // });
+        if(message.title == 'server_error'){
+          // take some action e.g logout, change page
+        }
+      });
+      return undefined;
+    });
 
-    // let id = 0;
-    // if(main_category != undefined){
-    //   main_category.data.data.map((item: ContentApiInterface)  => {
-    //     let category = new ContentObject(item);
-    //     if(id == 0){
-    //       id = category.content_id;
-    //     }
-    //     if(category.content_id < id){
-    //       id = category.content_id;
-    //     }
-    //   })
-    // }
+    if(app_settings != undefined){
+      
+      let settings_object = new CompanySettingsObject(app_settings.data);
+    
 
+      if(settings_object.show_message == true){
+        let show_message = await this.dataCtrl.getStorage('UPDATE_MESSAGE');
 
-    // //const url_articles = `/api/content/group_of_group_offline/`;
-    // const url_articles = `/api/content/contents_offline/?id=${id}`;
+        if(show_message != 'SET'){
+            await this.dataCtrl.setStorage('UPDATE_MESSAGE', 'SET');
+            const alert = await this.alertController.create({
+              header: await this.dataCtrl.translateWord("UPDATE.TITLE"),
+              subHeader: await this.dataCtrl.translateWord("UPDATE.SUB_TITLE") + ' v' + settings_object.company_app_version_display,
+              message: await this.dataCtrl.translateWord("UPDATE.TEXT"),
+              buttons: [await this.dataCtrl.translateWord("UPDATE.ACTION")],
+            });
+            await alert.present();
+        }
+      }
+      
+      // if(settings_object.show_update_page == true){
+      //   // open update page
+      // }
+    }
 
-    // try {
-    //   const articles_data = await this.dataCtrl.getServer(url_articles, true, 20);
-    //   this.contents = articles_data.data.data.map((item: ContentApiInterface) => new ContentObject(item));
-    //   this.dataLoad = true;
-    // } catch (err) {
-    //   const message = await this.dataCtrl.parseErrorMessage(err);
-    //   this.dataCtrl.showToast(message.message, message.type);
-    //   if (message.title == 'server_error') {
-    //     // take some action e.g logout, change page
-    //   }
-    // }
+  }
+
+  async loadData(){
+    let rootContent = await this.contentCtrl.getRootContent();
+
+    if(rootContent.length > 0){
+      let rootContent_id = rootContent[0]['content_id'];
+
+      let homePageCategory = await this.contentCtrl.getCategoryContent(rootContent_id);
+
+      if(homePageCategory.length > 0){
+        this.contents = [];
+        homePageCategory.map((item) => {
+          this.contents.push(item);
+        })
+      }
+      this.dataLoad = true;
+    }
   }
 
   async openSettings(){

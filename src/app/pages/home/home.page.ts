@@ -7,6 +7,7 @@ import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { CachedImageComponent } from 'src/app/components/cached-image/cached-image.component';
 import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
+import { NativeService } from 'src/app/services/native.service';
 
 @Component({
   selector: 'app-home',
@@ -23,9 +24,12 @@ export class HomePage {
   contents: Array<ContentObject> = [];
   category!: ContentObject;
 
+  main_image: string = '';
+
   constructor(
     private dataCtrl: ControllerService,
     private contentCtrl: DataService,
+    private nativeCtrl: NativeService,
     private router: Router
   ) {
     //
@@ -59,6 +63,10 @@ export class HomePage {
         })
       }
     }
+
+    //load cache image
+    this.main_image = await this.nativeCtrl.getImage(this.category.content_image_obj?.full_url || '');
+
     this.dataLoad = true;
   }
 

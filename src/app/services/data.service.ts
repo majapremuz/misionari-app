@@ -14,7 +14,7 @@ export class DataService {
   content_signature: string = '';
 
   constructor(
-    private apiCtrl: ControllerService 
+    private apiCtrl: ControllerService
   ) {
     this.getContentLoad();
   }
@@ -78,8 +78,14 @@ export class DataService {
   private async getContentLoad(){
     let server: boolean = false;
     let cache: boolean = await this.checkCache();
-    if(!cache) server = await this.checkServer();
-    else this.checkServer();
+    if(!cache){
+      await this.apiCtrl.showLoader();
+      server = await this.checkServer();
+      await this.apiCtrl.hideLoader();
+    }
+    else{
+      this.checkServer();
+    }
     return (server || cache);
   }
 

@@ -6,20 +6,29 @@
     <div
     *ngIf="content.content_has_image"
     class="hero-container" 
-    [ngStyle]="{'background-image': 'url(' + content.content_image_obj?.full_url + ')'}">
+    [ngStyle]="{'background-image': 'url(' + main_image + ')'}">
     </div>
 
     <div class="attachment-container ion-padding">
       <ng-container *ngIf="content.content_attachment_key_obj != null">
-        <ion-list class="ion-no-padding" *ngFor="let attachment of content.content_attachment_key_obj">
-          <ion-item (click)="openAttachment(attachment)" color="text-item" lines="none">
-            <ion-label>{{ attachment.multimedia_file_old }}</ion-label>
-          </ion-item>
-        </ion-list>
+        <ng-container *ngFor="let attachment of content.content_attachment_key_obj">
+          <ion-list class="ion-no-padding" *ngIf="attachment.sound == false">
+            <ion-item (click)="openAttachment(attachment)" color="text-item" lines="none">
+              <ion-label>{{ attachment.multimedia_file_old }}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ng-container>
       </ng-container>
     </div>
 
     <div class="text-container"  *ngIf = 'dataLoad'>
+
+      <ng-container *ngIf="content.content_attachment_key_obj != null">
+        <ng-container *ngFor="let attachment of content.content_attachment_key_obj">
+          <app-audio *ngIf="attachment.sound == true" style="width:100%; padding:5px;" [url]="attachment.full_url"></app-audio>
+        </ng-container>
+      </ng-container>
+
       <ng-container *ngIf="content.segments.length > 0">
         <ng-container *ngFor="let segment of content.segments">
           <h2 *ngIf="segment.segment_title != ''">{{ segment.segment_title }}</h2>

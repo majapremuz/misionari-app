@@ -33,6 +33,7 @@ interface ImageInterface {
     full_url_thumbnail2x: string
     full_url: string
     image: boolean
+    sound: boolean
     display_name: string
 }
 
@@ -40,7 +41,11 @@ enum MultimediaMime {
     png  = 'image/png',
     jpg  = 'image/jpg',
     jpeg = 'image/jpeg',
-    gif  = 'image/gif'
+    gif  = 'image/gif',
+    mp3  = 'audio/mp3',
+    mp4  = 'audio/mp4',
+    mpeg  = 'audio/mpeg'
+
 }
 
 export class ImageObject implements ImageInterface{
@@ -57,6 +62,7 @@ export class ImageObject implements ImageInterface{
     full_url_thumbnail2x: string
     full_url: string
     image: boolean
+    sound: boolean
     display_name: string
 
     doc_icon: string = 'assets/imgs/document.png';
@@ -75,6 +81,7 @@ export class ImageObject implements ImageInterface{
         this.full_url_thumbnail2x = '';
         this.full_url = '';
         this.image = false;
+        this.sound = false;
         this. display_name = '';
 
         this.getPath();
@@ -97,10 +104,17 @@ export class ImageObject implements ImageInterface{
             this.full_url_thumbnail2x = environment.rest_server.protokol + environment.rest_server.host + environment.rest_server.multimedia + '/thumbnail2x/' + this.multimedia_file;
 
             this.image = true;
+            this.sound = false;
+          }
+          else if(this.multimedia_mime == MultimediaMime.mp3 || this.multimedia_mime == MultimediaMime.mp4 || this.multimedia_mime == MultimediaMime.mpeg){
+            this.full_url = environment.rest_server.protokol + environment.rest_server.host + environment.rest_server.multimedia + '/' + this.multimedia_file;
+            this.image = false;
+            this.sound = true;
           }
           else{
             this.full_url = environment.rest_server.protokol + environment.rest_server.host + environment.rest_server.multimedia + '/' + this.multimedia_file;
             this.image = false;
+            this.sound = false;
           }
     }
 }

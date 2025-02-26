@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { InfoComponent } from "./no-data/info.component";
 
+
 @NgModule({
     imports: [IonicModule, CommonModule],
     declarations: [InfoComponent],
