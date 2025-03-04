@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.misionari.prolink',
-  appName: 'Rijeke milosrđa',
+  appName: 'Rijeka milosrđa',
   webDir: 'www',
   plugins: {
     PushNotifications: {
